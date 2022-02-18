@@ -4,7 +4,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">社員情報詳細</div>
+                    <div class="card-header">以下の内容で登録完了しました。</div>
                     <p>氏名：{{ $user->name }}</p>
                     <p>社員番号：{{ $user->employee_num }}</p>
                     <p>年齢：{{ $user->age }}</p>
@@ -16,11 +16,6 @@
                     <p>メールアドレス：{{ $user->email }}</p>
                     <p>更新日：{{ $user->created_at }}</p>
                     <p>登録日：{{ $user->updated_at }}</p>
-                    <form class="card-body" action="/users/{{ $user->id }}/edit" method="get">
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">編集する</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>

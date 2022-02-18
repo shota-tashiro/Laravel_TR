@@ -14,9 +14,12 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
+
+     //リスナーを定義してリスナークラス(App\Listeners\RegisteredListener)を作成する。ターミナルでphp artisan event:generateを実行する。
     protected $listen = [
         Registered::class => [
-            SendEmailVerificationNotification::class,
+            // SendEmailVerificationNotification::class,
+            'App\Listeners\RegisteredListener',
         ],
     ];
 

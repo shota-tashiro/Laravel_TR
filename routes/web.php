@@ -2,36 +2,29 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/', [\App\Http\Controllers\TopPageController::class, 'top_page'])->name('top_page');
 
 Auth::routes();
 
 
+//ログイン画面//
+//認証後
+Route::get('/home', [\App\Http\Controllers\HomeController::class, 'home'])->name('home');
 
-Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Route::get('/users', [\App\Http\Controllers\UserController::class,'get_user_list'])->name('users.list')->middleware('auth');
+//ホーム画面//
+//社員管理ボタン押下→社員管理画面
+Route::get('/employeeManege', [\App\Http\Controllers\EmployeeManegeController::class, 'showEmployeeManegeMenu'])->name('showEmployeeManegeMenu');
+//会議室予約ボタン押下→
+Route::get('/calendar', [\App\Http\Controllers\ReserveController::class, 'calendar'])->name('calendar');
+//議事録ボタン押下→議事録メニュー画面
+
+
 Route::resource('/users', \App\Http\Controllers\UserController::class)->middleware('auth');
 
 
 Route::get('/roles', [\App\Http\Controllers\RoleController::class,'get_role_list'])->name('roles.list')->middleware('auth');
-
-Route::get('/calendar', [\App\Http\Controllers\ReserveController::class, 'calendar'])->name('calendar');
 
 Route::get('/reserve', [\App\Http\Controllers\ReserveController::class, 'show'])->name('show');
 

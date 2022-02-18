@@ -3,33 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // public function get_user_list() {
-    //     $user = auth()->user();
-    //     $this->authorize('viewAny', $user); // Policy をチェック
-    //     $users = \App\Models\User::get(); // 社員一覧を取得
-    //     return view('users.list', compact('users'));
-    // }
-
-        /**
-     * Display a listing of the resource.
+    /**
+     * 社員一覧画面を表示
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        // $user = auth()->user();
-        // $this->authorize('viewAny', $user); // Policy をチェック
-        // $users = \App\Models\User::get(); // 社員一覧を取得
         $users = User::paginate();
         return view('users.list', compact('users'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 新規社員登録画面を表示
      *
      * @return \Illuminate\Http\Response
      */
@@ -39,7 +31,7 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 新規社員登録処理を実行
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -50,7 +42,7 @@ class UserController extends Controller
             'name' => ['required', 'max:20'],
             'employee_num' => ['required', 'Numeric', 'unique:App\Models\User,employee_num'],
             'age' => ['required', 'Numeric'],
-            'birthday' => ['required', 'Date'],
+            // 'birthday' => ['required', 'Date'],
             'role_id' => ['required'],
             'postal' => ['required'],
             'address' => ['required'],
@@ -59,34 +51,35 @@ class UserController extends Controller
             'password' => ['required']
             ]);
         $user = User::create($attribute);
-        return redirect('/users');
+        event(new Registered($user));
+        return view('users.completed', compact('user'));
+        
     }
 
     /**
-     * Display the specified resource.
+     * 社員詳細情報画面を表示
      *
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function show(User $user)
     {
-        // $this->authorize('view', $user);
         return view('users.show', compact('user'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 社員情報編集画面を表示
      *
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
     {
-        //
+        return view('users.edit', compact('user'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * 社員情報更新処理を実行
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
@@ -94,11 +87,40 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        
+        $rules = [
+            'name' => ['required', 'max:20'],
+            //更新時はuniqueでバリデーションかけると更新前の値と比較してエラーが発生してしまう。
+            // 'employee_num' => ['required', 'numeric', 'unique:users,employee_num'],
+            'age' => ['required', 'numeric'],
+ 
+            'role_id' => ['required'],
+            'postal' => ['required'],
+            'address' => ['required'],
+            'phone' => ['required'],
+            'email' => ['required', 'email']
+        ];
+        $this->validate($request, $rules);
+
+        $user = User::find($user->id);
+        
+        $user->name = $request->input('name');
+        $user->employee_num = $request->input('employee_num');
+        $user->age = $request->input('age');
+        // $user->birthday = $request->input('birthday');
+        $user->role_id = $request->input('role_id');
+        $user->postal = $request->input('postal');
+        $user->address = $request->input('address');
+        $user->phone = $request->input('phone');
+        $user->email = $request->input('email');
+        $user->save();
+        
+        
+        return view('users.show', compact('user'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 社員情報削除処理を実行
      *
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
