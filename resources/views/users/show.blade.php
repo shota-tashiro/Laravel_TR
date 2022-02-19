@@ -5,22 +5,25 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">社員情報詳細</div>
-                    <p>氏名：{{ $user->name }}</p>
-                    <p>社員番号：{{ $user->employee_num }}</p>
-                    <p>年齢：{{ $user->age }}</p>
-                    <p>生年月日：{{ $user->birthday }}</p>
-                    <p>役職：{{ $user->role['role_name'] }}</p>
-                    <p>郵便番号：{{ $user->postal }}</p>
-                    <p>住所：{{ $user->address }}</p>
-                    <p>電話番号：{{ $user->phone }}</p>
-                    <p>メールアドレス：{{ $user->email }}</p>
-                    <p>更新日：{{ $user->created_at }}</p>
-                    <p>登録日：{{ $user->updated_at }}</p>
-                    <form class="card-body" action="/users/{{ $user->id }}/edit" method="get">
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">編集する</button>
+                    <div class="card-body">
+                        <div>
+                            <p>氏名：{{ $user->name }}</p>
                         </div>
-                    </form>
+                        <p>社員番号：{{ $user->employee_num }}</p>
+                        <p>年齢：{{ $user->age }}</p>
+                        <p>生年月日：{{ $user->birthday }}</p>
+                        <p>役職：{{ $user->role['role_name'] }}</p>
+                        <p>郵便番号：{{ $user->postal }}</p>
+                        <p>住所：{{ $user->address }}</p>
+                        <p>電話番号：{{ $user->phone }}</p>
+                        <p>メールアドレス：{{ $user->email }}</p>
+                        <form action="/users/{{ $user->id }}/edit" method="get">
+                            @csrf
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">編集する</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
